@@ -1,17 +1,32 @@
-# shop_project
+<div align="center">
 
-Flutter shop project for testing task.
+# Zaza
 
-## Getting Started
+<p>
+  <img src="https://img.shields.io/badge/Flutter-Application-02569B?logo=flutter&logoColor=white" alt="Flutter" />
+  <img src="https://img.shields.io/badge/Dart-Language-0175C2?logo=dart&logoColor=white" alt="Dart" />
+  <img src="https://img.shields.io/badge/Platform-Android-3DDC84?logo=android&logoColor=white" alt="Android" />
+  <img src="https://img.shields.io/badge/Status-In%20Development-yellow" alt="Status" />
+</p>
 
-This project is a starting point for a Flutter application.
+<p><b>Каталог мультикатегорийного маркетплейса на Flutter.</b></p>
 
-A few resources to get you started if this is your first Flutter project:
+</div>
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+## О проекте
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+**Zaza** - учебное мобильное приложение маркетплейса с каталогом товаров разных категорий.
+
+## Реализовано
+
+- Приветственный экран.
+
+## В разработке
+- Каталог товаров.
+- Просмотр карточки товара.
+- Добавление товаров в корзину.
+- Изменение количества товаров.
+- Оформление товаров.
+- Категории товаров
+- Рекомендации
+- История просмотренных карточек
