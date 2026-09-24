@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
-import 'cart_screen.dart';
-import 'catalog_screen.dart';
+import 'cart/cart_screen.dart';
+import 'catalog/catalog_screen.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+  final VoidCallback onThemeToggle;
+
+  const MainScreen({super.key, required this.onThemeToggle});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -29,8 +31,12 @@ class _MainScreenState extends State<MainScreen> {
         centerTitle: true,
         actions: [
           IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.dark_mode_outlined),
+            onPressed: widget.onThemeToggle,
+            icon: Icon(
+              Theme.of(context).brightness == Brightness.dark
+                  ? Icons.light_mode_outlined
+                  : Icons.dark_mode_outlined,
+            ),
           ),
         ],
       ),
