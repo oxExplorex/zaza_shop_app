@@ -22,17 +22,19 @@ class _OrderSuccessScreenState extends State<OrderSuccessScreen> {
             children: [
               SizedBox(height: 12),
 
-              Icon(Icons.check_circle_outline, size: 100, color: Colors.green),
+              Icon(Icons.check_circle_outline, size: 200, color: Colors.green),
 
               SizedBox(height: 12),
 
-              Text('Поздравляем!'),
+              Text('Поздравляем!', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
 
               SizedBox(height: 6),
 
-              Text('Ваш заказ оплачен и скоро появится в профиле'),
+              Text('Ваш заказ оплачен и скоро появится в профиле',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 18, ),),
 
-              SizedBox(height: 12),
+              SizedBox(height: 24),
 
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -48,7 +50,7 @@ class _OrderSuccessScreenState extends State<OrderSuccessScreen> {
                 child: Text('Отследить заказ'),
               ),
 
-              SizedBox(height: 12),
+              SizedBox(height: 48),
 
               ElevatedButton(
                 style: ElevatedButton.styleFrom(

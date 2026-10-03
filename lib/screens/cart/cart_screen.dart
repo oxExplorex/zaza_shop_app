@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shop_project/screens/cart/widgets/cart_item_card.dart';
 import 'package:shop_project/screens/success_screen.dart';
 
@@ -26,8 +27,14 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
+    var formatter = NumberFormat(',###');
+
     return Scaffold(
+      backgroundColor: AppColors.white,
+
       appBar: AppBar(
+        elevation: 0,
+        scrolledUnderElevation: 0,
         title: Center(
           child: Text('Корзина', style: TextStyle(color: AppColors.white)),
         ),
@@ -55,9 +62,20 @@ class _CartScreenState extends State<CartScreen> {
           return Column(
             children: [
               Expanded(
-                child: ListView.builder(
-                  itemCount: productsIds.length,
+                child: ListView.separated(
+                  itemCount: productsIds.length + 1,
+
+                  separatorBuilder: (context, index) => Divider(
+                    height: 1,
+                    thickness: 1,
+                    color: AppColors.inactiveCategory,
+                  ),
+
                   itemBuilder: (context, index) {
+                    if (index == productsIds.length) {
+                      return SizedBox();
+                    }
+
                     final id = productsIds[index];
                     final product = widget.productState.getById(id);
                     final quantity = widget.cart.quantityOf(id);
@@ -77,7 +95,10 @@ class _CartScreenState extends State<CartScreen> {
 
                             IconButton(
                               onPressed: () => widget.cart.remove(id),
-                              icon: Icon(Icons.delete_outline_outlined),
+                              icon: Icon(
+                                Icons.delete_outline_outlined,
+                                color: AppColors.primary,
+                              ),
                             ),
                           ],
                         ),
@@ -123,7 +144,9 @@ class _CartScreenState extends State<CartScreen> {
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [Text('Итого'), Text('$total ')],
+                        children: [
+                          Text('Итого', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                          Text('${formatter.format(total)} ₽', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),)],
                       ),
                     ),
 
