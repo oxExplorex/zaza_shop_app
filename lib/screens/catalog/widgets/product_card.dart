@@ -4,13 +4,20 @@ import 'package:intl/intl.dart';
 import '../../../models/product.dart';
 import '../../../theme/app_colors.dart';
 
-
 // Виджет одной карточки в гаталоге
 class ProductCard extends StatelessWidget {
   final Product product;
   final int index;
+  final VoidCallback onAdd;
+  final VoidCallback onOpen;
 
-  const ProductCard({super.key, required this.product, required this.index});
+  const ProductCard({
+    super.key,
+    required this.product,
+    required this.index,
+    required this.onAdd,
+    required this.onOpen,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,52 +33,61 @@ class ProductCard extends StatelessWidget {
           ? AppColors.productCardPink(context)
           : AppColors.productCardYellow(context),
 
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // продукты
-            Expanded(
-              child: Center(
+      // InkWell делает область нажимаемой
+      child: InkWell(
+        onTap: onOpen,
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // продукты
+              Expanded(
+                child: Center(
+                  // загрузка картинки
+                  child: Image.network(
+                    product.image,
+                    fit: BoxFit.contain,
 
-                // загрузка картинки
-                child: Image.network(
-                  product.image,
-                  fit: BoxFit.contain,
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) {
+                        return child;
+                      }
 
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) {
-                      return child;
-                    }
+                      return const Center(child: CircularProgressIndicator());
+                    },
 
-                    return const Center(child: CircularProgressIndicator());
-                  },
-
-                  errorBuilder: (context, error, stackTrace) {
-                    return const Icon(Icons.broken_image_outlined, size: 48);
-                  },
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Icon(Icons.broken_image_outlined, size: 48);
+                    },
+                  ),
                 ),
               ),
-            ),
 
-            Text(
-              product.name,
-              maxLines: 2,
-              style: TextStyle(
-                color: AppColors.heading(context),
-                fontWeight: FontWeight.w600,
+              Text(
+                product.name,
+                maxLines: 2,
+                style: TextStyle(
+                  color: AppColors.heading(context),
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
 
-            Text(
-              '${formatter.format(product.priceCents)} ₽',
-              style: TextStyle(
-                color: AppColors.price(context),
-                fontWeight: FontWeight.w500,
+              Text(
+                '${formatter.format(product.priceCents)} ₽',
+                style: TextStyle(
+                  color: AppColors.price(context),
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-            ),
-          ],
+
+              IconButton(
+                  onPressed: onAdd,
+                  icon: Icon(Icons.add)
+              )
+
+            ],
+          ),
         ),
       ),
     );

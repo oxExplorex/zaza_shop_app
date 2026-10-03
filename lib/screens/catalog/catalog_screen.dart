@@ -4,23 +4,27 @@ import 'package:shop_project/screens/catalog/widgets/category_list.dart';
 import 'package:shop_project/screens/catalog/widgets/product_card.dart';
 
 import '../../models/product.dart';
-import '../../services/product_api.dart';
+import '../../state/cart_state.dart';
+import '../../state/product_state.dart';
+import '../product/product_screen.dart';
 
 class CatalogScreen extends StatefulWidget {
-  const CatalogScreen({super.key});
+  final CartState cart;
+  final ProductState productState;
+  final ValueChanged<int> onTabSelected;
+
+  const CatalogScreen({
+    super.key,
+    required this.cart,
+    required this.productState,
+    required this.onTabSelected,
+  });
 
   @override
   State<CatalogScreen> createState() => _CatalogScreenState();
 }
 
 class _CatalogScreenState extends State<CatalogScreen> {
-  final ProductApi _productApi = ProductApi();
-
-  List<Product> _products = [];
-
-  bool _isLoading = true;
-  String? _errorMessage;
-
   // Выбранная категория по дефолту первая(одежда)
   CatalogCategory _selectedCategory = CatalogCategory.clothing;
 
@@ -31,7 +35,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
   List<Product> get _visibleProducts {
     final categories = _selectedCategory.categories;
 
-    return _products.where((product) {
+    return widget.productState.products.where((product) {
       // фильтрация
       return categories.contains(product.category);
     }).toList();
@@ -43,96 +47,108 @@ class _CatalogScreenState extends State<CatalogScreen> {
   void initState() {
     super.initState();
 
-    _loadProducts();
-  }
-
-  Future<void> _loadProducts() async {
-    try {
-      final List<Product> products = await _productApi.getProducts();
-
-      if (!mounted) return;
-
-      debugPrint('Получено товаров: ${products.length}');
-
-      setState(() {
-        _products = products;
-        _isLoading = false;
-        _errorMessage = null;
-      });
-    } catch (e) {
-      if (!mounted) return;
-
-      debugPrint('Ошибка загрузки товаров: $e');
-
-      setState(() {
-        _isLoading = false;
-        _errorMessage = 'Не удалось загрузить товары';
-      });
-    }
+    widget.productState.loadProducts();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
+    // для построения использовать ListenableBuilder
+    // слушает изменения в ChangeNotifier
+    return ListenableBuilder(
+      listenable: widget.productState,
+      builder: (context, child) {
+        final state = widget.productState;
 
-    if (_errorMessage != null) {
-      return Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(_errorMessage!),
+        if (state.isLoading) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-            ElevatedButton(
-              onPressed: _loadProducts,
-              child: const Text('Повторить'),
+        if (state.errorMessage != null) {
+          return Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(state.errorMessage!),
+
+                ElevatedButton(
+                  onPressed: widget.productState.loadProducts,
+                  child: const Text('Повторить'),
+                ),
+              ],
             ),
-          ],
-        ),
-      );
-    }
+          );
+        }
 
-    return Column(
-      children: [
-        // категории
-        // Одежда
-        // Электроника
-        // Красота
-        // Для домаК
-        CategoryList(
-          categories: categoryList,
-          selectedCategory: _selectedCategory,
+        final visibleProducts = _visibleProducts;
 
-          // передаем функцию, чтобы изменять категорию в другом виджете
-          onSelected: (category) {
-            setState(() {
-              _selectedCategory = category;
-            });
-          },
-        ),
+        return Column(
+          children: [
+            // категории
+            // Одежда
+            // Электроника
+            // Красота
+            // Для домаК
+            CategoryList(
+              categories: categoryList,
+              selectedCategory: _selectedCategory,
 
-        // загрузка каталога
-        Expanded(
-          child: RefreshIndicator(
-            onRefresh: _loadProducts,
-            child: GridView.builder(
-              physics: const AlwaysScrollableScrollPhysics(),
-              itemCount: _visibleProducts.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-                childAspectRatio: 0.65,
-              ),
-              itemBuilder: (context, index) {
-                final product = _visibleProducts[index];
-                return ProductCard(product: product, index: index);
+              // передаем функцию, чтобы изменять категорию в другом виджете
+              onSelected: (category) {
+                setState(() {
+                  _selectedCategory = category;
+                });
               },
             ),
-          ),
-        ),
-      ],
+
+            // загрузка каталога
+            Expanded(
+              child: RefreshIndicator(
+                onRefresh: state.loadProducts,
+                child: GridView.builder(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  itemCount: visibleProducts.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 12,
+                    childAspectRatio: 0.65,
+                  ),
+                  itemBuilder: (context, index) {
+                    final product = visibleProducts[index];
+                    return ProductCard(
+                      product: product,
+                      index: index,
+                      onAdd: () => widget.cart.increase(product.id),
+
+                      onOpen: () async {
+                        final tab = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return ProductScreen(
+                                product: product,
+                                cart: widget.cart,
+                                sourceTab: 1,
+                              );
+                            },
+                          ),
+                        );
+
+                        if (!mounted) return;
+
+                        if (tab != null) {
+                          widget.onTabSelected(tab);
+                        }
+
+                      },
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
