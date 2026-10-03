@@ -32,7 +32,7 @@ class ProductState extends ChangeNotifier {
   Future<void> loadProducts() async {
     if (_isLoading) return;
 
-    _isLoading = false;
+    _isLoading = true;
     _errorMessage = null;
 
     debugPrint('Начало загрузки');
