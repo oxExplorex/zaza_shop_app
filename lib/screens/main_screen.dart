@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../theme/app_colors.dart';
 import 'cart/cart_screen.dart';
 import 'catalog/catalog_screen.dart';
 
@@ -43,7 +44,11 @@ class _MainScreenState extends State<MainScreen> {
 
       body: IndexedStack(index: currentPageIndex, children: pages),
 
+      // TODO: заменить на Row(Expanded) так как нельзя сделать как на макете :(
       bottomNavigationBar: NavigationBar(
+        // скрывает названия у NavigationDestination
+        labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
+
         selectedIndex: currentPageIndex,
 
         onDestinationSelected: (index) {
@@ -52,10 +57,16 @@ class _MainScreenState extends State<MainScreen> {
           });
         },
 
+        backgroundColor: AppColors.navigationInactive,
+        indicatorColor: AppColors.navigationActive,
+
         destinations: [
-          NavigationDestination(icon: Icon(Icons.home), label: "Главная"),
           NavigationDestination(
-            icon: Icon(Icons.shopping_cart),
+            icon: Icon(Icons.home, color: AppColors.white, size: 30),
+            label: "Каталог",
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.shopping_cart, color: AppColors.white),
             label: "Корзина",
           ),
         ],
