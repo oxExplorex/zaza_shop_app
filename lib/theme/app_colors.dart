@@ -10,6 +10,8 @@ class AppColors {
   static const black = Colors.black;
   static const inactiveCategory = Colors.black54;
 
+  static const dividerColor = Colors.black12;
+
   static const addButton = Color(0xffffffff);
   static const addButtonBackground = Color(0xffffe3c9);
 

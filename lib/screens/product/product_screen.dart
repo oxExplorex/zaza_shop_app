@@ -43,7 +43,10 @@ class _ProductScreenState extends State<ProductScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ElevatedButton.icon(
-                        label: Text('Назад'),
+                        label: Text(
+                          'Назад',
+                          style: TextStyle(color: AppColors.black),
+                        ),
                         onPressed: () => Navigator.pop(context),
                         icon: Icon(Icons.arrow_back_ios_new, size: 24),
                       ),
@@ -96,7 +99,10 @@ class _ProductScreenState extends State<ProductScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(widget.product.name),
+                            Text(
+                              widget.product.name,
+                              style: TextStyle(fontSize: 24),
+                            ),
 
                             SizedBox(height: 24),
 
@@ -112,7 +118,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                         vertical: 12,
                                       ),
                                       shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(8),
+                                        borderRadius: BorderRadius.circular(12),
                                       ),
                                     ),
 
@@ -126,6 +132,11 @@ class _ProductScreenState extends State<ProductScreen> {
                                   child: Text(
                                     '${formatter.format(widget.product.priceCents)} ₽',
                                     textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                      fontSize: 24,
+                                      color: AppColors.primary,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -137,7 +148,7 @@ class _ProductScreenState extends State<ProductScreen> {
                       const Divider(
                         thickness: 2,
                         height: 2,
-                        color: AppColors.primary,
+                        color: AppColors.dividerColor,
                       ),
 
                       Padding(
@@ -145,8 +156,25 @@ class _ProductScreenState extends State<ProductScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Описание'),
-                            Text(widget.product.description),
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: AppColors.primary,
+                                    width: 3,
+                                  )
+                                )
+                              ),
+                              child: Text(
+                                'Описание',
+                                style: TextStyle(fontSize: 18),
+                              ),
+                            ),
+                            SizedBox(height: 12,),
+                            Text(
+                              widget.product.description,
+                              style: TextStyle(fontSize: 14),
+                            ),
                           ],
                         ),
                       ),
@@ -154,14 +182,26 @@ class _ProductScreenState extends State<ProductScreen> {
                       const Divider(
                         thickness: 2,
                         height: 2,
-                        color: AppColors.primary,
+                        color: AppColors.dividerColor,
                       ),
 
                       Padding(
                         padding: const EdgeInsets.all(24),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [Text('Ключевые слова:'), Text(widget.product.keywords.join(', '))],
+                          children: [
+                            Text(
+                              'Ключевые слова:',
+                              style: TextStyle(fontSize: 18),
+                            ),
+
+                            SizedBox(height: 12,),
+
+                            Text(
+                              widget.product.keywords.join(', '),
+                              style: TextStyle(fontSize: 14),
+                            ),
+                          ],
                         ),
                       ),
                     ],
