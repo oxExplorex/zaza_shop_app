@@ -64,26 +64,45 @@ class ProductCard extends StatelessWidget {
                 ),
               ),
 
-              Text(
-                product.name,
-                maxLines: 2,
-                style: TextStyle(
-                  color: AppColors.heading(context),
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+              SizedBox(height: 12,),
 
-              Text(
-                '${formatter.format(product.priceCents)} ₽',
-                style: TextStyle(
-                  color: AppColors.price(context),
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    product.name,
+                    maxLines: 2,
+                    style: TextStyle(
+                      color: AppColors.heading(context),
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
 
-              IconButton(
-                  onPressed: onAdd,
-                  icon: Icon(Icons.add)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '${formatter.format(product.priceCents)} ₽',
+                        style: TextStyle(
+                          color: AppColors.price(context),
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+
+                      IconButton(
+
+                          onPressed: onAdd,
+                          style: IconButton.styleFrom(
+                            backgroundColor: AppColors.addButtonBackground,
+                            foregroundColor: AppColors.navigationActive,
+                          ),
+                          icon: Icon(Icons.add)
+                      ),
+                    ],
+                  ),
+                ],
               )
 
             ],
