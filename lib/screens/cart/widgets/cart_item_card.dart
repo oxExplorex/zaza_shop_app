@@ -34,6 +34,8 @@ class CartItemCard extends StatelessWidget {
 
     // Одна карточка товара в корзине
     return Card(
+      color: AppColors.white,
+      elevation: 0,
       child: InkWell(
         onTap: onOpen,
 
@@ -54,16 +56,11 @@ class CartItemCard extends StatelessWidget {
                       return child;
                     }
 
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
+                    return const Center(child: CircularProgressIndicator());
                   },
 
                   errorBuilder: (context, error, stackTrace) {
-                    return const Icon(
-                      Icons.broken_image_outlined,
-                      size: 64,
-                    );
+                    return const Icon(Icons.broken_image_outlined, size: 64);
                   },
                 ),
               ),
@@ -82,25 +79,52 @@ class CartItemCard extends StatelessWidget {
                     Row(
                       children: [
                         IconButton(
+                          iconSize: 22,
                           onPressed: onDecrease,
+                          constraints: BoxConstraints.tightFor(
+                            width: 24,
+                            height: 24,
+                          ),
+                          style: IconButton.styleFrom(
+                            padding: EdgeInsets.zero,
+                            backgroundColor: AppColors.white,
+                            foregroundColor: AppColors.black,
+                            side: BorderSide(color: AppColors.black),
+                          ),
                           icon: Icon(Icons.remove),
                         ),
 
                         Text(
                           '$quantity',
-                          style: TextStyle(fontWeight: FontWeight.w800),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
                         ),
 
                         IconButton(
                           onPressed: onIncrease,
+                          iconSize: 22,
+                          constraints: BoxConstraints.tightFor(
+                            width: 24,
+                            height: 24,
+                          ),
+                          style: IconButton.styleFrom(
+                            padding: EdgeInsets.zero,
+                            backgroundColor: AppColors.addButtonBackground,
+                            foregroundColor: AppColors.navigationActive,
+                          ),
                           icon: Icon(Icons.add_outlined),
                         ),
 
                         IconButton(
                           onPressed: onRemove,
-                          icon: Icon(Icons.delete_outline),
-                        ),
 
+                          icon: Icon(
+                            Icons.delete_outline,
+                            color: AppColors.primary,
+                          ),
+                        ),
                       ],
                     ),
                   ],
@@ -112,10 +136,7 @@ class CartItemCard extends StatelessWidget {
                 children: [
                   Text(
                     '${formatter.format(product.priceCents)} ₽',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w800,
-                    ),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
                   ),
                 ],
               ),

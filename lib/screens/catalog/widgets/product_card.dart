@@ -92,9 +92,14 @@ class ProductCard extends StatelessWidget {
                       ),
 
                       IconButton(
-
+                          iconSize: 24,
                           onPressed: onAdd,
+                          constraints: BoxConstraints.tightFor(
+                            width: 30,
+                            height: 30,
+                          ),
                           style: IconButton.styleFrom(
+                            padding: EdgeInsets.zero,
                             backgroundColor: AppColors.addButtonBackground,
                             foregroundColor: AppColors.navigationActive,
                           ),

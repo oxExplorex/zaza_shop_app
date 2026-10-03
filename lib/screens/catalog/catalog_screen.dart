@@ -139,7 +139,6 @@ class _CatalogScreenState extends State<CatalogScreen> {
                         if (tab != null) {
                           widget.onTabSelected(tab);
                         }
-
                       },
                     );
                   },
