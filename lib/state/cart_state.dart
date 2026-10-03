@@ -8,11 +8,15 @@ class CartState extends ChangeNotifier {
   // { id(товара): count(кол-во)}
   final Map<int, int> _quantities = {};
 
+
+  List<int> get productsIds => _quantities.keys.toList();
+
+
   int quantityOf(int productId) {
     return _quantities[productId] ?? 0;
   }
 
-  void add(int productId) {
+  void increase(int productId) {
     _quantities[productId] = quantityOf(productId) + 1;
     notifyListeners();
   }
@@ -38,6 +42,11 @@ class CartState extends ChangeNotifier {
 
     _quantities.remove(productId);
     notifyListeners();
-
   }
+
+  void clear() {
+    _quantities.clear();
+    notifyListeners();
+  }
+
 }

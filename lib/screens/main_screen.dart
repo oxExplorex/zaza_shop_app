@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../state/cart_state.dart';
+import '../state/product_state.dart';
 import '../theme/app_colors.dart';
+import '../widgets/shop_navigation_bar.dart';
 import 'cart/cart_screen.dart';
 import 'catalog/catalog_screen.dart';
 
@@ -16,7 +19,11 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int currentPageIndex = 0;
 
-  final List<Widget> pages = const [CatalogScreen(), CartScreen()];
+  // корзина {id:count,}
+  final CartState _cart = CartState();
+
+  // содержимое каталога
+  final ProductState _products = ProductState();
 
   // TODO: адаптивность через MediaQuery к логотипу?
 
@@ -24,6 +31,9 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: currentPageIndex == 0
+            ? AppColors.white
+            : AppColors.primary,
         title: Image.asset(
           "assets/images/logo.png",
           height: 150,
@@ -42,35 +52,47 @@ class _MainScreenState extends State<MainScreen> {
         ],
       ),
 
-      body: IndexedStack(index: currentPageIndex, children: pages),
+      body: IndexedStack(
+        index: currentPageIndex,
+        children: [
+          CatalogScreen(
+            cart: _cart,
+            productState: _products,
+            onTabSelected: (index) {
+              setState(() {
+                currentPageIndex = index;
+              });
+            },
+          ),
+          CartScreen(
+            cart: _cart,
+            productState: _products,
+            onTabSelected: (index) {
+              setState(() {
+                currentPageIndex = index;
+              });
+            },
+          ),
+        ],
+      ),
 
       // TODO: заменить на Row(Expanded) так как нельзя сделать как на макете :(
-      bottomNavigationBar: NavigationBar(
-        // скрывает названия у NavigationDestination
-        labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
-
+      bottomNavigationBar: ShopNavigationBar(
         selectedIndex: currentPageIndex,
-
-        onDestinationSelected: (index) {
+        onSelected: (index) {
           setState(() {
             currentPageIndex = index;
           });
         },
-
-        backgroundColor: AppColors.navigationInactive,
-        indicatorColor: AppColors.navigationActive,
-
-        destinations: [
-          NavigationDestination(
-            icon: Icon(Icons.home, color: AppColors.white, size: 30),
-            label: "Каталог",
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.shopping_cart, color: AppColors.white),
-            label: "Корзина",
-          ),
-        ],
       ),
     );
+  }
+
+  // чтобы был общий states на всех экранах
+  @override
+  void dispose() {
+    _cart.dispose();
+    _products.dispose();
+    super.dispose();
   }
 }
